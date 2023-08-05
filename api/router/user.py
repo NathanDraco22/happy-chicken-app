@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Response
 
 from pydantic import BaseModel
 from api.controllers.user import UserController
@@ -15,8 +14,9 @@ async def get_all_user():
     return user_controller.get_all_user()
 
 @user_router.post("/signup")
-async def user_sign_up(body: UserModel):
-    return user_controller.sign_up(body)
+async def user_sign_up(body: UserModel, res: Response):
+    model, res.status_code = user_controller.sign_up(body) 
+    return model
 
 @user_router.post("/signin")
 async def user_sign_in():

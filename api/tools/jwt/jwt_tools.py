@@ -5,7 +5,7 @@ class JWT:
     key = "secret"
     
     @classmethod
-    def enconde(cls, payload: dict):
+    def encode(cls, payload: dict):
         exp_time = int((datetime.datetime.now() + datetime.timedelta(minutes=15)).timestamp())
         claims = {
             "exp" : exp_time

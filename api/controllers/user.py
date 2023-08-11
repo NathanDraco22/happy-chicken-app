@@ -6,6 +6,8 @@ from api.services.db_services.tinydb_services import TinyDBServices
 from api.entities.models.user import UserModel
 from api.entities.factories.user_factory import UserFactory
 from api.tools.responses.user_response import UserResponse
+from api.tools.crypt.password_tool import PasswordCrypter
+from api.tools.jwt.jwt_tools import JWT
 
 class UserController:
 
@@ -15,10 +17,16 @@ class UserController:
         result = self.db_serivices.search_by_phone(user.phone)
         if len(result) != 0:
             return (UserResponse(msg= "User already exist"), 400)
+        user.password = PasswordCrypter.encrypt(user.password)
         user_dict = UserFactory.toDict(user)
-        self.db_serivices.create(user_dict)
+        user_id = self.db_serivices.create(user_dict)
+        token = JWT.encode({})
         return (
-            UserResponse(msg= "User Created", token= "123"),
+            UserResponse(
+                msg= "User Created", 
+                token= token,
+                userId= user_id
+            ),
             200
         )
     

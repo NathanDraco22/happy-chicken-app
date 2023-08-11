@@ -9,7 +9,7 @@ class UserFactory:
     
     @staticmethod
     def fromDict(json: dict[str, str]) -> UserModel:
-        user = UserModel()
+        user = UserModel(name="",password="",phone="")
         for k,v in json.items():
             setattr(user, k, v)
         return user

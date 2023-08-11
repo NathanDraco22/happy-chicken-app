@@ -18,16 +18,9 @@ class UserController:
             return (UserResponse(msg= "User already exist"), 400)
         user.password = PasswordCrypter.encrypt(user.password)
         user_dict = UserFactory.toDict(user)
-        user_id = self.db_serivices.create(user_dict)
+        self.db_serivices.create(user_dict)
         token = JWT.encode({"name" : user.name})
-        return (
-            UserResponse(
-                msg= "User Created", 
-                token= token,
-                userId= user_id
-            ),
-            200
-        )
+        return (UserResponse( msg= "User Created", token= token), 200)
     
     def sign_in(self, userDTO: SigninDTO) -> tuple[UserResponse, int]:
         result = self.db_serivices.search_by_phone(userDTO.phone)
@@ -37,10 +30,7 @@ class UserController:
         if not PasswordCrypter.verify(userDTO.password, user_db.password ):
             return (UserResponse(msg= "Invalid Credentials"), 400)
         token = JWT.encode({"name" : user_db.name})
-        return (UserResponse(
-            msg = "Logged",
-            token= token,  
-        ), 200)
+        return (UserResponse( msg = "Logged", token= token), 200)
 
     
     def get_all_user(self):

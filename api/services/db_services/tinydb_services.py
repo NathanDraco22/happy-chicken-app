@@ -15,7 +15,6 @@ class TinyDBServices:
         ...
     
     def search_by_phone(self, phone:str) -> [dict]:
-        print("algo")
         user_query = Query()
         return self.db.search(user_query.phone == phone)
 
